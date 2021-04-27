@@ -9,7 +9,8 @@ updater = Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 def createEmoticon(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Create Command")
+    if "/create" in update.message.text:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Create Command")
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hello, World!")
