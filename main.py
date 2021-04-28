@@ -1,5 +1,5 @@
-import telegram
 from telegram.ext import CommandHandler, Dispatcher, Filters, MessageHandler, Updater
+import telegram
 
 apiKeyFile = open("/home/server/KakaoEmoticon2TelegramSticker_KEY", 'r')
 TOKEN = apiKeyFile.read().rstrip('\n')
