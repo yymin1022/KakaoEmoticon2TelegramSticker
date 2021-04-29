@@ -20,6 +20,10 @@ def createEmoticon(update, context):
     divTitle = divInfo.find("div", class_="info_product")
     strTitle = divTitle.find_all("span", class_="tit_inner")[0]
 
+    divEmoticons = divContent.find("div", class_="area_emoticon")
+    listEmoticons = divEmoticons.find("ul")
+    itemEmoticons = listEmoticons.find_all("li")
+
     context.bot.send_message(chat_id=update.effective_chat.id, text=strTitle)
 
 def start(update, context):
