@@ -10,8 +10,17 @@ dispatcher = updater.dispatcher
 
 def createEmoticon(update, context):
     emoticonURL = context.args[0]
+    soupHeader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36'}
+    
+    pageResource = requests.get(emoticonURL, headers=soupHeader)
+    soup = BeautifulSoup(pageResource.text, features="html.parser")
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=context.args[0])
+    divContent = soup.find("div", id="kakaoContent")
+    divInfo = divContent.find("div", class_="area_product")
+    divTitle = divInfo.find("div", class_="info_product")
+    strTitle = divTitle.find_all("span", class_="tit_inner")[0]
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text=strTitle)
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bot Started!")
