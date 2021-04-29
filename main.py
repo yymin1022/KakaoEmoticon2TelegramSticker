@@ -12,7 +12,7 @@ def createEmoticon(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=context.args[0])
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello, World!")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Bot Started!")
 
 create_handler = CommandHandler("create", createEmoticon)
 start_handler = CommandHandler("start", start)
