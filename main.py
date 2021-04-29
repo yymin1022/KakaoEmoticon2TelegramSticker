@@ -9,6 +9,8 @@ updater = Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 def createEmoticon(update, context):
+    emoticonURL = context.args[0]
+
     context.bot.send_message(chat_id=update.effective_chat.id, text=context.args[0])
 
 def start(update, context):
