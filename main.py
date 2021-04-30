@@ -24,6 +24,9 @@ def createEmoticon(update, context):
     listEmoticons = divEmoticons.find("ul")
     itemEmoticons = listEmoticons.find_all("li")
 
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divContent)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divInfo)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divTitle)
     context.bot.send_message(chat_id=update.effective_chat.id, text=strTitle)
 
 def start(update, context):
