@@ -19,7 +19,7 @@ def createEmoticon(update, context):
     soup = BeautifulSoup(pageResource.text, features="html.parser")
 
     divContent = soup.find("div", id="kakaoContent")
-    print("Content))
+    print("Content")
     print(divContent)
     divInfo = divContent.find("div", class_="area_product")
     print("Info")
