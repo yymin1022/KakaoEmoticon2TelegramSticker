@@ -18,7 +18,9 @@ def createEmoticon(update, context):
     pageResource = requests.get(emoticonURL, headers=soupHeader)
     soup = BeautifulSoup(pageResource.text, features="html.parser")
 
-    divContent = soup.find("div", id="kakaoContent")
+    divRoot = soup.find("div", id="root")
+    divWrap = divRoot.find("div", id="kakaoWrap")
+    divContent = divWrap.find("div", id="kakaoContent")
     print("Content")
     print(divContent)
     divInfo = divContent.find("div", class_="area_product")
