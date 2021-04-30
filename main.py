@@ -1,6 +1,9 @@
 from telegram.ext import CommandHandler, Dispatcher, Filters, MessageHandler, Updater
 import telegram
 
+from bs4 import BeautifulSoup
+import requests
+
 apiKeyFile = open("/home/server/KakaoEmoticon2TelegramSticker_KEY", 'r')
 TOKEN = apiKeyFile.read().rstrip('\n')
 apiKeyFile.close()
