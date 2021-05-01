@@ -29,18 +29,10 @@ def createEmoticon(update, context):
 
     pageResource = driver.page_source
     soup = BeautifulSoup(pageResource, features="html.parser")
-    print("Source")
-    print(pageResource)
 
     divRoot = soup.find("div", id="root")
-    print("Root")
-    print(divRoot)
     divWrap = divRoot.find("div", id="kakaoWrap")
-    print("Wrap")
-    print(divWrap)
     divContent = divWrap.find("div", id="kakaoContent")
-    print("Content")
-    print(divContent)
     divInfo = divContent.find("div", class_="area_product")
     print("Info")
     print(divInfo)
