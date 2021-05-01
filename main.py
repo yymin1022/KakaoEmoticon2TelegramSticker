@@ -29,7 +29,6 @@ def createEmoticon(update, context):
 
     pageResource = driver.page_source
     soup = BeautifulSoup(pageResource, features="html.parser")
-
     print("Source")
     print(pageResource)
 
