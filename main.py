@@ -24,7 +24,7 @@ def createEmoticon(update, context):
     options.add_argument('--no-sandbox')
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(executable_path='/home/server/web/chromedriver', chrome_options=options)
-    url = 'http://airforce.mil.kr:8081/user/indexSub.action?codyMenuSeq=156894686&siteId=tong-new&menuUIType=sub'
+    url = 'https://e.kakao.com/t/uh-uh-uh-ver-2'
     driver.get(url)
 
     pageResource = driver.page_source
