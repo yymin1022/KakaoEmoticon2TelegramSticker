@@ -23,7 +23,7 @@ def createEmoticon(update, context):
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(executable_path='/home/server/web/chromedriver', chrome_options=options)
+    driver = webdriver.Chrome(executable_path='/home/server/KakaoEmoticon2TelegramSticker/chromedriver', chrome_options=options)
     url = 'https://e.kakao.com/t/uh-uh-uh-ver-2'
     driver.get(url)
 
