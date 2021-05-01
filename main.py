@@ -27,7 +27,7 @@ def createEmoticon(update, context):
     url = 'https://e.kakao.com/t/uh-uh-uh-ver-2'
     driver.get(url)
 
-    pageResource = driver.page_source.text
+    pageResource = driver.page_source
     soup = BeautifulSoup(pageResource, features="html.parser")
     print("Source")
     print(pageResource)
