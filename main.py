@@ -33,15 +33,9 @@ def createEmoticon(update, context):
     divRoot = soup.find("div", id="root")
     divWrap = divRoot.find("div", id="kakaoWrap")
     divContent = divWrap.find("div", id="kakaoContent")
-    print("Content")
-    print(divContent)
     divInfo = divContent.find("div", class_="area_product")
-    print("Info")
-    print(divInfo)
     divTitle = divInfo.find("div", class_="info_product")
-    print("Title")
-    print(divTitle)
-    strTitle = divTitle.find_all("span", class_="tit_inner")[0]
+    strTitle = divTitle.find("h3", class_="tit_product")
 
     divEmoticons = divContent.find("div", class_="area_emoticon")
     listEmoticons = divEmoticons.find("ul")
