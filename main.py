@@ -34,6 +34,8 @@ def createEmoticon(update, context):
     divWrap = divRoot.find("div", id="kakaoWrap")
     divContent = divWrap.find("div", id="kakaoContent")
     divInfo = divContent.find("div", class_="area_product")
+    print("Info")
+    print(divInfo)
     divTitle = divInfo.find("div", class_="info_product")
     strTitle = divTitle.find("h3", class_="tit_product")
 
