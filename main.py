@@ -28,7 +28,7 @@ def createEmoticon(update, context):
     driver.get(url)
 
     pageResource = driver.page_source
-    soup = BeautifulSoup(pageResource features="html.parser")
+    soup = BeautifulSoup(pageResource, features="html.parser")
 
     divRoot = soup.find("div", id="root")
     print("Root")
