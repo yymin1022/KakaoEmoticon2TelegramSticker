@@ -33,6 +33,8 @@ def createEmoticon(update, context):
     divRoot = soup.find("div", id="root")
     divWrap = divRoot.find("div", id="kakaoWrap")
     divContent = divWrap.find("div", id="kakaoContent")
+    print("Content")
+    print(divContent)
     divInfo = divContent.find("div", class_="area_product")
     print("Info")
     print(divInfo)
