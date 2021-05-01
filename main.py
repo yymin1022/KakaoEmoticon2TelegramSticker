@@ -1,6 +1,10 @@
 from telegram.ext import CommandHandler, Dispatcher, Filters, MessageHandler, Updater
 import telegram
 
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -15,7 +19,15 @@ def createEmoticon(update, context):
     emoticonURL = context.args[0]
     soupHeader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36'}
     
-    pageResource = requests.get(emoticonURL, headers=soupHeader)
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(executable_path='/home/server/web/chromedriver', chrome_options=options)
+    url = 'http://airforce.mil.kr:8081/user/indexSub.action?codyMenuSeq=156894686&siteId=tong-new&menuUIType=sub'
+    driver.get(url)
+
+    pageResource = driver.page_source
     soup = BeautifulSoup(pageResource.text, features="html.parser")
 
     divRoot = soup.find("div", id="root")
