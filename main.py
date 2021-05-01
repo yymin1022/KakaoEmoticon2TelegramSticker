@@ -37,6 +37,8 @@ def createEmoticon(update, context):
     print("Info")
     print(divInfo)
     divTitle = divInfo.find("div", class_="info_product")
+    print("Title")
+    print(divTitle)
     strTitle = divTitle.find("h3", class_="tit_product")
 
     divEmoticons = divContent.find("div", class_="area_emoticon")
