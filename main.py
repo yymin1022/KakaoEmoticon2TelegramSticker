@@ -25,26 +25,21 @@ def createEmoticon(update, context):
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(executable_path='/home/server/KakaoEmoticon2TelegramSticker/chromedriver', chrome_options=options)
     url = 'https://e.kakao.com/t/uh-uh-uh-ver-2'
-    driver.get(url)
+    driver.get(url) 
 
     pageResource = driver.page_source
     soup = BeautifulSoup(pageResource, features="html.parser")
 
     divRoot = soup.find("div", id="root")
-    print("Root")
-    print(divRoot)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divRoot.text)
     divWrap = divRoot.find("div", id="kakaoWrap")
-    print("Wrap")
-    print(divWrap)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divWrap.text)
     divContent = divWrap.find("div", id="kakaoContent")
-    print("Content")
-    print(divContent)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divContent.text)
     divInfo = divContent.find("div", class_="area_product")
-    print("Info")
-    print(divInfo)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divInfo.text)
     divTitle = divInfo.find("div", class_="info_product")
-    print("Title")
-    print(divTitle)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=divTitle.text)
     strTitle = divTitle.find("h3", class_="tit_product")
 
     divEmoticons = divContent.find("div", class_="area_emoticon")
