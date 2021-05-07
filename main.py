@@ -36,7 +36,7 @@ def createEmoticon(update, context):
     divInfo = divContent.find("div", class_="area_product")
     divTitle = divInfo.find("div", class_="info_product")
     strTitle = divTitle.find("h3", class_="tit_product")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=strTitle.text)
+    context.bot.send_message(chat_id=update.effective_chat.id, text="%s를 다운로드 합니다."%(strTitle.text))
 
     divEmoticons = divContent.find("div", class_="area_emoticon")
     listEmoticons = divEmoticons.find("ul")
