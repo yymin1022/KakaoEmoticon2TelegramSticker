@@ -31,13 +31,9 @@ def createEmoticon(update, context):
     soup = BeautifulSoup(pageResource, features="html.parser")
 
     divRoot = soup.find("div", id="root")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=divRoot.text)
     divWrap = divRoot.find("div", id="kakaoWrap")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=divWrap.text)
     divContent = divWrap.find("div", id="kakaoContent")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=divContent.text)
     divInfo = divContent.find("div", class_="area_product")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=divInfo.text)
     divTitle = divInfo.find("div", class_="info_product")
     context.bot.send_message(chat_id=update.effective_chat.id, text=divTitle.text)
     strTitle = divTitle.find("h3", class_="tit_product")
