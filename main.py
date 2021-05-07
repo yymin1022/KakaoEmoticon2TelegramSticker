@@ -17,7 +17,6 @@ dispatcher = updater.dispatcher
 
 def createEmoticon(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="카카오 이모티콘 서비스에 접속하는 중입니다.")
-    context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
     emoticonURL = context.args[0]
     soupHeader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36'}
@@ -28,7 +27,9 @@ def createEmoticon(update, context):
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(executable_path='/home/server/KakaoEmoticon2TelegramSticker/chromedriver', chrome_options=options)
     url = 'https://e.kakao.com/t/uh-uh-uh-ver-2'
-    driver.get(url) 
+    driver.get(url)
+    
+    context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
     pageResource = driver.page_source
     soup = BeautifulSoup(pageResource, features="html.parser")
