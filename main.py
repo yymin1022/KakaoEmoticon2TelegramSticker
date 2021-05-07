@@ -47,7 +47,7 @@ def createEmoticon(update, context):
     listEmoticons = divEmoticons.find("ul")
     itemEmoticons = listEmoticons.find_all("li")
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=itemEmoticons[0].text)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=itemEmoticons[0])
 
 def helpMenu(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
