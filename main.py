@@ -16,6 +16,9 @@ updater = Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 def createEmoticon(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="카카오 이모티콘 서비스에 접속하는 중입니다.")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
+
     emoticonURL = context.args[0]
     soupHeader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36'}
     
@@ -36,13 +39,11 @@ def createEmoticon(update, context):
     divInfo = divContent.find("div", class_="area_product")
     divTitle = divInfo.find("div", class_="info_product")
     strTitle = divTitle.find("h3", class_="tit_product")
-    context.bot.send_message(chat_id=update.effective_chat.id, text="%s를 다운로드 합니다."%(strTitle.text))
+    context.bot.send_message(chat_id=update.effective_chat.id, text="%s 이모티콘을 다운로드 합니다."%(strTitle.text))
 
     divEmoticons = divContent.find("div", class_="area_emoticon")
     listEmoticons = divEmoticons.find("ul")
     itemEmoticons = listEmoticons.find_all("li")
-
-    context.bot.send_message(chat_id=update.effective_chat.id, text=strTitle)
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bot Started!")
