@@ -7,6 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from bs4 import BeautifulSoup
 import requests
+import urllib.request
 
 apiKeyFile = open("/home/server/KakaoEmoticon2TelegramSticker_KEY", 'r')
 TOKEN = apiKeyFile.read().rstrip('\n')
@@ -45,6 +46,8 @@ def createEmoticon(update, context):
     divEmoticons = divContent.find("div", class_="area_emoticon")
     listEmoticons = divEmoticons.find("ul")
     itemEmoticons = listEmoticons.find_all("li")
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text=itemEmoticons)
 
 def helpMenu(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
