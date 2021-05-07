@@ -1,6 +1,8 @@
 from telegram.ext import CommandHandler, Dispatcher, Filters, MessageHandler, Updater
 import telegram
 
+from PIL import Image
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
@@ -53,6 +55,10 @@ def createEmoticon(update, context):
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
         urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/" + str(count) + ".png")
+
+        img = Image.open("emoticonTemp/" + str(count) + ".png")
+        imgResize = img.resize((512, 512))
+        imgResize.save("emoticonTemp/" + str(count) + ".png")
 
         pngEmoticon = open("emoticonTemp/" + str(count) + ".png", "rb")
         arrEmoticon.append(pngEmoticon)
