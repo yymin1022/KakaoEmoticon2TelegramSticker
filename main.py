@@ -57,6 +57,7 @@ help_handler = CommandHandler("help", helpMenu)
 start_handler = CommandHandler("start", startBot)
 
 dispatcher.add_handler(create_handler)
+dispatcher.add_handler(help_handler)
 dispatcher.add_handler(start_handler)
 
 updater.start_polling()
