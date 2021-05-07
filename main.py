@@ -48,13 +48,18 @@ def createEmoticon(update, context):
     itemEmoticons = listEmoticons.find_all("li")
 
     count = 0
+    arrEmoticon = []
 
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
         urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/" + str(count) + ".png")
-        count += 1
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=str(itemEmoticons[0]))
+        pngEmoticon = open("emoticonTemp/" + str(count) + ".png", "rb")
+        arrEmoticon.append(pngEmoticon)
+
+        count += 1
+    
+    context.bot.send_message(chat_id=update.effective_chat.id, text=str(arrEmoticon))
 
 def helpMenu(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
