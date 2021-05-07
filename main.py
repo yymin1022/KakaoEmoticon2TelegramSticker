@@ -49,7 +49,7 @@ def createEmoticon(update, context):
 
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
-        urllib.request.urlretrieve(urlEmoticon, "emoticonTemp" + soup.find("img")["alt"]+'.png')
+        urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/" + soup.find("img")["alt"]+'.png')
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=str(itemEmoticons[0]))
 
