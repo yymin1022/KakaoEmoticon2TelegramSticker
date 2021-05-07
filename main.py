@@ -59,7 +59,7 @@ def createEmoticon(update, context):
 
         count += 1
     
-    context.bot.create_new_sticker_set(user_id=318996831, name="test_sticker", title="Test Sticker", emojis="😀", contains_masks=False, png_sticker=open("emoticonTemp/0.png", "rb"))
+    context.bot.create_new_sticker_set(user_id=318996831, name="test_sticker_by_<bot username>", title="Test Sticker", emojis="😀", contains_masks=False, png_sticker=open("emoticonTemp/0.png", "rb"))
     context.bot.send_message(chat_id=update.effective_chat.id, text=str(arrEmoticon))
 
 def helpMenu(update, context):
