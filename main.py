@@ -59,7 +59,7 @@ def createEmoticon(update, context):
 
         count += 1
     
-    context.bot.create_new_sticker_set(user_id=318996831, name="teststicker_by_kakaoemoticon2telegramsticker", title="Test Sticker", emojis="😀", contains_masks=False, png_sticker=open("emoticonTemp/0.png", "rb"))
+    context.bot.create_new_sticker_set(user_id=318996831, name="kakaosticker_by_KakaoEmoticon2Telegram_bot", title="Test Sticker", emojis="😀", contains_masks=False, png_sticker=open("emoticonTemp/0.png", "rb"))
     context.bot.send_message(chat_id=update.effective_chat.id, text=str(arrEmoticon))
 
 def helpMenu(update, context):
