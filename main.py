@@ -28,7 +28,7 @@ def createEmoticon(update, context):
     driver = webdriver.Chrome(executable_path='/home/server/KakaoEmoticon2TelegramSticker/chromedriver', chrome_options=options)
     url = 'https://e.kakao.com/t/uh-uh-uh-ver-2'
     driver.get(url)
-    
+
     context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
     pageResource = driver.page_source
@@ -46,11 +46,15 @@ def createEmoticon(update, context):
     listEmoticons = divEmoticons.find("ul")
     itemEmoticons = listEmoticons.find_all("li")
 
-def start(update, context):
+def helpMenu(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
+
+def startBot(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bot Started!")
 
 create_handler = CommandHandler("create", createEmoticon)
-start_handler = CommandHandler("start", start)
+help_handler = CommandHandler("help", helpMenu)
+start_handler = CommandHandler("start", startBot)
 
 dispatcher.add_handler(create_handler)
 dispatcher.add_handler(start_handler)
