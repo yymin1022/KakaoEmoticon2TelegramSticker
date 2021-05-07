@@ -47,6 +47,10 @@ def createEmoticon(update, context):
     listEmoticons = divEmoticons.find("ul")
     itemEmoticons = listEmoticons.find_all("li")
 
+    for srcEmoticon in itemEmoticons:
+        urlEmoticon = srcEmoticon.find("img")["src"]
+        urllib.request.urlretrieve(urlEmoticon, "emoticonTemp" + soup.find("img")["alt"]+'.png')
+
     context.bot.send_message(chat_id=update.effective_chat.id, text=str(itemEmoticons[0]))
 
 def helpMenu(update, context):
