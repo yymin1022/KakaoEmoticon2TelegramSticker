@@ -66,7 +66,7 @@ def createEmoticon(update, context):
                                         contains_masks=False,
                                         png_sticker=open("emoticonTemp/0.png", "rb"))
         else:
-            context.bot.add_to_sticker_set(user_id=318996831,
+            context.bot.add_sticker_to_set(user_id=318996831,
                                         name="testKakaosticker_by_KakaoEmoticon2Telegram_bot",
                                         emojis="😀",
                                         png_sticker=open("emoticonTemp/" + str(count) + ".png", "rb"))
