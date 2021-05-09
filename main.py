@@ -42,8 +42,8 @@ def createEmoticon(update, context):
     divContent = divWrap.find("div", id="kakaoContent")
     divInfo = divContent.find("div", class_="area_product")
     divTitle = divInfo.find("div", class_="info_product")
-    strTitle = divTitle.find("h3", class_="tit_product")
-    context.bot.send_message(chat_id=update.effective_chat.id, text="%s 이모티콘을 다운로드 합니다."%(strTitle.text))
+    strTitle = divTitle.find("h3", class_="tit_product").text
+    context.bot.send_message(chat_id=update.effective_chat.id, text="%s 이모티콘을 다운로드 합니다."%(strTitle))
 
     divEmoticons = divContent.find("div", class_="area_emoticon")
     listEmoticons = divEmoticons.find("ul")
@@ -60,8 +60,7 @@ def createEmoticon(update, context):
         imgResize.save("emoticonTemp/" + str(count) + ".png")
 
         if count == 0:
-            context.bot.create_new_sticker_set(user_id=318996831,
-                                        name="testKakaosticker_by_KakaoEmoticon2Telegram_bot",
+            context.bot.create_new_sticker_set(user_id=318996831, name="testKakaosticker_by_KakaoEmoticon2Telegram_bot",
                                         title=strTitle,
                                         emojis="😀",
                                         contains_masks=False,
