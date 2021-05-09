@@ -66,7 +66,7 @@ def createEmoticon(update, context):
         count += 1
     
     context.bot.create_new_sticker_set(user_id=318996831, name="kakaosticker_by_KakaoEmoticon2Telegram_bot", title="Test Sticker", emojis="😀", contains_masks=False, png_sticker=open("emoticonTemp/0.png", "rb"))
-    context.bot.send_message(chat_id=update.effective_chat.id, text=str(arrEmoticon))
+    context.bot.send_message(chat_id=update.effective_chat.id, text="스티커 생성이 완료되었습니다.")
 
 def helpMenu(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
