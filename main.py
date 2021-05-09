@@ -50,7 +50,6 @@ def createEmoticon(update, context):
     itemEmoticons = listEmoticons.find_all("li")
 
     count = 0
-    arrEmoticon = []
 
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
@@ -60,13 +59,22 @@ def createEmoticon(update, context):
         imgResize = img.resize((512, 512))
         imgResize.save("emoticonTemp/" + str(count) + ".png")
 
-        pngEmoticon = open("emoticonTemp/" + str(count) + ".png", "rb")
-        arrEmoticon.append(pngEmoticon)
+        if count == 0:
+            context.bot.create_new_sticker_set(user_id=318996831,
+                                        name="testKakaosticker_by_KakaoEmoticon2Telegram_bot",
+                                        title=strTitle,
+                                        emojis="😀",
+                                        contains_masks=False,
+                                        png_sticker=open("emoticonTemp/" + str(count) + ".png", "rb"))
+        else:
+            context.bot.add_to_sticker_set(user_id=318996831,
+                                        name="testKakaosticker_by_KakaoEmoticon2Telegram_bot",
+                                        emojis="😀",
+                                        png_sticker=open("emoticonTemp/" + str(count) + ".png", "rb"))
 
         count += 1
     
-    context.bot.create_new_sticker_set(user_id=318996831, name="kakaosticker_by_KakaoEmoticon2Telegram_bot", title="Test Sticker", emojis="😀", contains_masks=False, png_sticker=open("emoticonTemp/0.png", "rb"))
-    context.bot.send_message(chat_id=update.effective_chat.id, text="스티커 생성이 완료되었습니다.")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="[TEST] Sticker Registration Done..!")
 
 def helpMenu(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
