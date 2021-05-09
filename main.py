@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 import requests
 import urllib.request
 
+import datetime
+
 apiKeyFile = open("/home/server/KakaoEmoticon2TelegramSticker_KEY", 'r')
 TOKEN = apiKeyFile.read().rstrip('\n')
 apiKeyFile.close()
@@ -50,6 +52,7 @@ def createEmoticon(update, context):
     itemEmoticons = listEmoticons.find_all("li")
 
     count = 0
+    stickerName = ""
 
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
@@ -60,16 +63,19 @@ def createEmoticon(update, context):
         imgResize.save("emoticonTemp/" + str(count) + ".png")
 
         if count == 0:
-            context.bot.create_new_sticker_set(user_id=318996831, name="testKakaosticker_by_KakaoEmoticon2Telegram_bot",
-                                        title=strTitle,
-                                        emojis="😀",
-                                        contains_masks=False,
-                                        png_sticker=open("emoticonTemp/0.png", "rb"))
+            curTime = datetime.datetime.now().replace(tzinfo=timezone.utc).timestamp()
+            stickerName = str(curTime) + "_Sticker_by_KakaoEmoticon2Telegram_bot"
+            context.bot.create_new_sticker_set(user_id=318996831, 
+                                                name=stickerName,
+                                                title=strTitle,
+                                                emojis="😀",
+                                                contains_masks=False,
+                                                png_sticker=open("emoticonTemp/0.png", "rb"))
         else:
             context.bot.add_sticker_to_set(user_id=318996831,
-                                        name="testKakaosticker_by_KakaoEmoticon2Telegram_bot",
-                                        emojis="😀",
-                                        png_sticker=open("emoticonTemp/" + str(count) + ".png", "rb"))
+                                            name=stickerName,
+                                            emojis="😀",
+                                            png_sticker=open("emoticonTemp/" + str(count) + ".png", "rb"))
 
         count += 1
     
