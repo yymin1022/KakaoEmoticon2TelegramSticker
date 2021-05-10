@@ -86,7 +86,6 @@ def createEmoticon(update, context):
     
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sticker Registration Done..!")
     context.bot.send_message(chat_id=update.effective_chat.id, text="https://t.me/addstickers/%s"%(stickerName))
-    
 
 def helpMenu(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
