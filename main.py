@@ -32,8 +32,7 @@ def createEmoticon(update, context):
     options.add_argument('--no-sandbox')
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(executable_path='/home/server/KakaoEmoticon2TelegramSticker/chromedriver', chrome_options=options)
-    url = 'https://e.kakao.com/t/uh-uh-uh-ver-2'
-    driver.get(url)
+    driver.get()
 
     context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
