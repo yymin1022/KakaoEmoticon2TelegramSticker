@@ -86,7 +86,7 @@ def createEmoticon(update, context):
         
         count += 1
     
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Sticker Registration Done..!")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="%s 스티커 생성이 완료되었습니다!"%(strTitle))
     context.bot.send_message(chat_id=update.effective_chat.id, text="https://t.me/addstickers/%s"%(stickerName))
 
 def helpMenu(update, context):
