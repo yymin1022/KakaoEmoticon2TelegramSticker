@@ -60,11 +60,11 @@ def createEmoticon(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text=str(srcEmoticon))
 
         urlEmoticon = srcEmoticon.find("img")["src"]
-        urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/" + str(count) + ".png")
+        urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/%d.png"%(count))
 
-        img = Image.open("emoticonTemp/" + str(count) + ".png")
+        img = Image.open("emoticonTemp/%d.png"%(count))
         imgResize = img.resize((512, 512))
-        imgResize.save("emoticonTemp/" + str(count) + ".png")
+        imgResize.save("emoticonTemp/%d.png"%(count))
 
         if count == 0:
             curTime = str(datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp()).replace(".", "")
@@ -80,13 +80,15 @@ def createEmoticon(update, context):
             context.bot.add_sticker_to_set(user_id=318996831,
                                             name=stickerName,
                                             emojis="😀",
-                                            png_sticker=open("emoticonTemp/" + str(count) + ".png", "rb"))
+                                            png_sticker=open("emoticonTemp/%d.png"%(count), "rb"))
 
-        os.remove("emoticonTemp/" + str(count) + ".png")
+        os.remove("emoticonTemp/%d.png"%(count))
         
         count += 1
     
-    context.bot.send_message(chat_id=update.effective_chat.id, text="[TEST] Sticker Registration Done..!")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Sticker Registration Done..!")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="https://t.me/addstickers/%s"%(stickerName))
+    
 
 def helpMenu(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
