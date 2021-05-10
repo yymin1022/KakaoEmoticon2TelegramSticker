@@ -55,9 +55,9 @@ def createEmoticon(update, context):
     count = 0
     stickerName = ""
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=str(itemEmoticons))
-
     for srcEmoticon in itemEmoticons:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=str(srcEmoticon))
+
         urlEmoticon = srcEmoticon.find("img")["src"]
         urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/" + str(count) + ".png")
 
