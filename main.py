@@ -78,6 +78,8 @@ def createEmoticon(update, context):
                                             emojis="😀",
                                             png_sticker=open("emoticonTemp/" + str(count) + ".png", "rb"))
 
+        os.remove("emoticonTemp/" + str(count) + ".png")
+        
         count += 1
     
     context.bot.send_message(chat_id=update.effective_chat.id, text="[TEST] Sticker Registration Done..!")
