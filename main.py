@@ -56,6 +56,8 @@ def createEmoticon(update, context):
     count = 0
     stickerName = ""
 
+    context.bot.send_message(chat_id=update.effective_chat.id, text="%d개의 이모티콘을 텔레그램 서버로 업로드합니다."%(len(itemEmoticons)))
+
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
         urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/%d.png"%(count))
