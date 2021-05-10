@@ -69,7 +69,6 @@ def createEmoticon(update, context):
         if count == 0:
             curTime = str(datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp()).replace(".", "")
             stickerName = "t%s_by_KakaoEmoticon2Telegram_bot"%(curTime)
-            context.bot.send_message(chat_id=update.effective_chat.id, text=stickerName)
             context.bot.create_new_sticker_set(user_id=318996831, 
                                                 name=stickerName,
                                                 title=strTitle,
