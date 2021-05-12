@@ -37,7 +37,7 @@ def createEmoticon(update, context):
 
     context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
-    pageResource = driver.execute_script("return document.body.innerHTML;")
+    pageResource = driver.page_source
     soup = BeautifulSoup(pageResource, features="html.parser")
 
     divRoot = soup.find("div", id="root")
@@ -94,6 +94,23 @@ def helpMenu(update, context):
 
 def startBot(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bot Started!")
+
+def scrollDown(driver, value):
+    driver.execute_script("window.scrollBy(0,"+str(value)+")")
+
+def scrollDownAllTheWay(driver):
+    old_page = driver.page_source
+    while True:
+        logging.debug("Scrolling loop")
+        for i in range(2):
+            scrollDown(driver, 500)
+            time.sleep(2)
+        new_page = driver.page_source
+        if new_page != old_page:
+            old_page = new_page
+        else:
+            break
+    return True
 
 create_handler = CommandHandler("create", createEmoticon)
 help_handler = CommandHandler("help", helpMenu)
