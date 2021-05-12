@@ -25,7 +25,7 @@ def createEmoticon(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="카카오 이모티콘 서비스에 접속하는 중입니다.")
 
     emoticonURL = context.args[0]
-    soupHeader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36'}
+    soupHeader = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'}
     
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
