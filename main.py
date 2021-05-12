@@ -35,6 +35,10 @@ def createEmoticon(update, context):
     
     driver.get(emoticonURL)
 
+    while(True):
+        if scrollDownAllTheWay(driver):
+            break
+
     context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
     pageResource = driver.page_source
