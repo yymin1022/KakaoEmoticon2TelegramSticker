@@ -105,7 +105,6 @@ def scrollDown(driver, value):
 def scrollDownAllTheWay(driver):
     old_page = driver.page_source
     while True:
-        logging.debug("Scrolling loop")
         for i in range(2):
             scrollDown(driver, 500)
             time.sleep(2)
