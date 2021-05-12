@@ -13,6 +13,7 @@ import urllib.request
 
 import datetime
 import os
+import time
 
 apiKeyFile = open("/home/server/KakaoEmoticon2TelegramSticker_KEY", 'r')
 TOKEN = apiKeyFile.read().rstrip('\n')
