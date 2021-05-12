@@ -37,11 +37,10 @@ def createEmoticon(update, context):
 
     context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
-    pageResource = driver.page_source
+    pageResource = find_element_by_id("rooot")
     soup = BeautifulSoup(pageResource, features="html.parser")
 
-    divRoot = soup.find("div", id="root")
-    divWrap = divRoot.find("div", id="kakaoWrap")
+    divWrap = soup.find("div", id="kakaoWrap")
     divContent = divWrap.find("div", id="kakaoContent")
     divInfo = divContent.find("div", class_="area_product")
     divTitle = divInfo.find("div", class_="info_product")
