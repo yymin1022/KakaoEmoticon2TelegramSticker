@@ -33,8 +33,8 @@ def createEmoticon(update, context):
     options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36")
     driver = webdriver.Chrome(executable_path='/home/server/KakaoEmoticon2TelegramSticker/chromedriver', options=options)
     
-    driver.get(emoticonURL)
     driver.implicitly_wait(10)
+    driver.get(emoticonURL)
 
     context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
 
