@@ -1,8 +1,8 @@
-# KakaoEmoticon to TelegramSticker Converter Bot
+﻿# KakaoEmoticon to TelegramSticker Converter Bot
 
-<img src="Images/app_1.png" width="30%" height="30%" alt="Screenshot"></img>
-<img src="Images/app_2.png" width="30%" height="30%" alt="Screenshot"></img>
-<img src="Images/app_3.png" width="30%" height="30%" alt="Screenshot"></img>
+<img src="Images/app_1.jpg" width="30%" height="30%" alt="Screenshot"></img>
+<img src="Images/app_2.jpg" width="30%" height="30%" alt="Screenshot"></img>
+<img src="Images/app_3.jpg" width="30%" height="30%" alt="Screenshot"></img>
 
 카카오톡의 이모티콘 세트를 텔레그램에서 사용 가능한 스티커 세트로 변환합니다.
 
