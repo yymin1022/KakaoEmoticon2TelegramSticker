@@ -64,11 +64,11 @@ def createEmoticon(update, context):
 
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
-        urllib.request.urlretrieve(urlEmoticon, "emoticonTemp/%d.png"%(count))
+        urllib.request.urlretrieve(urlEmoticon, "/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
 
-        img = Image.open("emoticonTemp/%d.png"%(count))
+        img = Image.open("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
         imgResize = img.resize((512, 512))
-        imgResize.save("emoticonTemp/%d.png"%(count))
+        imgResize.save("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
 
         if count == 0:
             curTime = str(datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp()).replace(".", "")
@@ -78,14 +78,14 @@ def createEmoticon(update, context):
                                                 title=strTitle,
                                                 emojis="😀",
                                                 contains_masks=False,
-                                                png_sticker=open("emoticonTemp/0.png", "rb"))
+                                                png_sticker=open("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/0.png", "rb"))
         else:
             context.bot.add_sticker_to_set(user_id=318996831,
                                             name=stickerName,
                                             emojis="😀",
-                                            png_sticker=open("emoticonTemp/%d.png"%(count), "rb"))
+                                            png_sticker=open("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count), "rb"))
 
-        os.remove("emoticonTemp/%d.png"%(count))
+        os.remove("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
         
         count += 1
     
