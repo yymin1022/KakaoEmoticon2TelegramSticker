@@ -15,9 +15,7 @@ import datetime
 import os
 import time
 
-apiKeyFile = open("/home/server/KakaoEmoticon2TelegramSticker_KEY", 'r')
-TOKEN = apiKeyFile.read().rstrip('\n')
-apiKeyFile.close()
+TOKEN = os.getenv("TELEGRAM_TOKEN", "NO_TOKEN")
 
 updater = Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
