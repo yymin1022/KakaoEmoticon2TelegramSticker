@@ -30,7 +30,7 @@ def createEmoticon(update, context):
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36")
-    driver = webdriver.Chrome(executable_path='/home/server/KakaoEmoticon2TelegramSticker/chromedriver', options=options)
+    driver = webdriver.Chrome(executable_path="/app/chromedriver", options=options)
     
     driver.get(emoticonURL)
 
@@ -62,11 +62,11 @@ def createEmoticon(update, context):
 
     for srcEmoticon in itemEmoticons:
         urlEmoticon = srcEmoticon.find("img")["src"]
-        urllib.request.urlretrieve(urlEmoticon, "/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
+        urllib.request.urlretrieve(urlEmoticon, "/app/emoticonTemp/%d.png"%(count))
 
-        img = Image.open("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
+        img = Image.open("/app/emoticonTemp/%d.png"%(count))
         imgResize = img.resize((512, 512))
-        imgResize.save("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
+        imgResize.save("/app/emoticonTemp/%d.png"%(count))
 
         if count == 0:
             curTime = str(datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp()).replace(".", "")
@@ -76,14 +76,14 @@ def createEmoticon(update, context):
                                                 title=strTitle,
                                                 emojis="😀",
                                                 contains_masks=False,
-                                                png_sticker=open("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/0.png", "rb"))
+                                                png_sticker=open("/app/emoticonTemp/0.png", "rb"))
         else:
             context.bot.add_sticker_to_set(user_id=318996831,
                                             name=stickerName,
                                             emojis="😀",
-                                            png_sticker=open("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count), "rb"))
+                                            png_sticker=open("/app/emoticonTemp/%d.png"%(count), "rb"))
 
-        os.remove("/home/server/KakaoEmoticon2TelegramSticker/emoticonTemp/%d.png"%(count))
+        os.remove("/app/emoticonTemp/%d.png"%(count))
         
         count += 1
     
