@@ -1,125 +1,116 @@
-from telegram.ext import CommandHandler, Dispatcher, Filters, MessageHandler, Updater
-import telegram
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+from telegram import Update, InputSticker
+from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler
+from telegram.constants import StickerFormat
 
 from PIL import Image
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-
-from bs4 import BeautifulSoup
-import requests
-import urllib.request
+from aiohttp import ClientSession
 
 import datetime
 import os
-import time
+from io import BytesIO
+from re import compile
+from typing import TypedDict, List, Sequence
 
-TOKEN = os.getenv("TELEGRAM_TOKEN", "NO_TOKEN")
 
-updater = Updater(token=TOKEN, use_context=True)
-dispatcher = updater.dispatcher
+class EmoticonMeta(TypedDict):
+    title: str
+    thumbnailUrls: List[str]
 
-def createEmoticon(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="카카오 이모티콘 서비스에 접속하는 중입니다.")
+
+EMOTICON_ID_REGEX = compile("https://e.kakao.com/t/.+")
+
+
+async def createEmoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    assert update.effective_chat
+    assert context.args
 
     emoticonURL = context.args[0]
-    
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36")
-    driver = webdriver.Chrome(executable_path="/app/chromedriver", options=options)
-    
-    driver.get(emoticonURL)
 
-    while(True):
-        if scrollDownAllTheWay(driver):
-            break
+    if not EMOTICON_ID_REGEX.match(emoticonURL):
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id, text="유효한 이모티콘 URL이 아닙니다."
+        )
+        return
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다.")
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다."
+    )
 
-    pageResource = driver.page_source
-    soup = BeautifulSoup(pageResource, features="html.parser")
+    emoticonURL = emoticonURL.replace(
+        "https://e.kakao.com/t/", "https://e.kakao.com/api/v1/items/t/"
+    )
 
-    divRoot = soup.find("div", id="root")
-    divWrap = divRoot.find("div", id="kakaoWrap")
-    divContent = divWrap.find("div", id="kakaoContent")
-    divInfo = divContent.find("div", class_="area_product")
-    divTitle = divInfo.find("div", class_="info_product")
-    strTitle = divTitle.find("h3", class_="tit_product").text
-    context.bot.send_message(chat_id=update.effective_chat.id, text="%s 이모티콘을 다운로드 합니다."%(strTitle))
+    async with ClientSession() as session:
+        async with session.get(emoticonURL) as resp:
+            emoticonMeta = EmoticonMeta((await resp.json())["result"])
 
-    divEmoticons = divContent.find("div", class_="area_emoticon")
-    listEmoticons = divEmoticons.find("ul", class_="list_emoticon")
-    itemEmoticons = listEmoticons.find_all("li")
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=f"{emoticonMeta['title']} 이모티콘을 다운로드 합니다.",
+        )
 
-    count = 0
-    stickerName = ""
+        stickers: Sequence[InputSticker] = []
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text="총 %d개의 이모티콘을 텔레그램 서버로 업로드합니다."%(len(itemEmoticons)))
+        for emoticon in emoticonMeta["thumbnailUrls"]:
+            async with session.get(emoticon) as img:
+                img_bytes = BytesIO()
+                Image.open(await img.read()).resize((512, 512)).save(img_bytes, "png")
+                stickers.append(InputSticker(img_bytes.getvalue(), ["😀"]))
+    curTime = str(datetime.datetime.utcnow().timestamp()).replace(".", "")
+    stickerName = f"t{curTime}_by_{context.bot.name}" % (curTime)
 
-    for srcEmoticon in itemEmoticons:
-        urlEmoticon = srcEmoticon.find("img")["src"]
-        urllib.request.urlretrieve(urlEmoticon, "/app/emoticonTemp/%d.png"%(count))
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=f"총 {len(emoticonMeta['thumbnailUrls'])}개의 이모티콘을 텔레그램 서버로 업로드합니다.",
+    )
 
-        img = Image.open("/app/emoticonTemp/%d.png"%(count))
-        imgResize = img.resize((512, 512))
-        imgResize.save("/app/emoticonTemp/%d.png"%(count))
+    await context.bot.create_new_sticker_set(
+        user_id=context.bot.id,
+        name=stickerName,
+        title=emoticonMeta["title"],
+        sticker_format=StickerFormat.STATIC,
+        stickers=stickers,
+    )
 
-        if count == 0:
-            curTime = str(datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp()).replace(".", "")
-            stickerName = "t%s_by_KakaoEmoticon2Telegram_bot"%(curTime)
-            context.bot.create_new_sticker_set(user_id=318996831, 
-                                                name=stickerName,
-                                                title=strTitle,
-                                                emojis="😀",
-                                                contains_masks=False,
-                                                png_sticker=open("/app/emoticonTemp/0.png", "rb"))
-        else:
-            context.bot.add_sticker_to_set(user_id=318996831,
-                                            name=stickerName,
-                                            emojis="😀",
-                                            png_sticker=open("/app/emoticonTemp/%d.png"%(count), "rb"))
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id, text=f"{emoticonMeta['title']} 스티커 생성이 완료되었습니다!"
+    )
 
-        os.remove("/app/emoticonTemp/%d.png"%(count))
-        
-        count += 1
-    
-    driver.close()
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="https://t.me/addstickers/%s" % (stickerName),
+    )
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text="%s 스티커 생성이 완료되었습니다!"%(strTitle))
-    context.bot.send_message(chat_id=update.effective_chat.id, text="https://t.me/addstickers/%s"%(stickerName))
 
-def helpMenu(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
+async def helpMenu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    assert update.effective_chat
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
 
-def startBot(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Bot Started!")
 
-def scrollDown(driver, value):
-    driver.execute_script("window.scrollBy(0,"+str(value)+")")
+async def startBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    assert update.effective_chat
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id, text="Bot Started!"
+    )
 
-def scrollDownAllTheWay(driver):
-    old_page = driver.page_source
-    while True:
-        for i in range(2):
-            scrollDown(driver, 500)
-            time.sleep(2)
-        new_page = driver.page_source
-        if new_page != old_page:
-            old_page = new_page
-        else:
-            break
-    return True
 
-create_handler = CommandHandler("create", createEmoticon)
-help_handler = CommandHandler("help", helpMenu)
-start_handler = CommandHandler("start", startBot)
+if __name__ == "__main__":
+    application = (
+        ApplicationBuilder().token(os.getenv("TELEGRAM_TOKEN", "NO_TOKEN")).build()
+    )
 
-dispatcher.add_handler(create_handler)
-dispatcher.add_handler(help_handler)
-dispatcher.add_handler(start_handler)
+    application.add_handlers(
+        [
+            CommandHandler("start", startBot),
+            CommandHandler("help", helpMenu),
+            CommandHandler("create", createEmoticon),
+        ]
+    )
 
-updater.start_polling()
+    application.run_polling()
