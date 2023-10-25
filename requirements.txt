@@ -1,5 +1,5 @@
 pillow
-python-telegram-bot
+python-telegram-bot[http2]
 aiohttp==3.9.0b0
 aiodns
 Brotli

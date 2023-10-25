@@ -164,7 +164,7 @@ async def startBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == "__main__":
     application = (
-        ApplicationBuilder().token(os.getenv("TELEGRAM_TOKEN", "NO_TOKEN")).build()
+        ApplicationBuilder().token(os.getenv("TELEGRAM_TOKEN", "NO_TOKEN")).http_version("2").build()
     )
 
     application.add_handlers(
