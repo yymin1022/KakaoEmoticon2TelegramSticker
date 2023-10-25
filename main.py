@@ -1,7 +1,7 @@
 import logging
 
-class ColorFormatter(logging.Formatter):
 
+class ColorFormatter(logging.Formatter):
     # ANSI codes are a bit weird to decipher if you're unfamiliar with them, so here's a refresher
     # It starts off with a format like \x1b[XXXm where XXX is a semicolon separated list of commands
     # The important ones here relate to colour.
@@ -12,17 +12,17 @@ class ColorFormatter(logging.Formatter):
     # 1 means bold, 2 means dim, 0 means reset, and 4 means underline.
 
     LEVEL_COLOURS = [
-        (logging.DEBUG, '\x1b[40;1m'),
-        (logging.INFO, '\x1b[34;1m'),
-        (logging.WARNING, '\x1b[33;1m'),
-        (logging.ERROR, '\x1b[31m'),
-        (logging.CRITICAL, '\x1b[41m'),
+        (logging.DEBUG, "\x1b[40;1m"),
+        (logging.INFO, "\x1b[34;1m"),
+        (logging.WARNING, "\x1b[33;1m"),
+        (logging.ERROR, "\x1b[31m"),
+        (logging.CRITICAL, "\x1b[41m"),
     ]
 
     FORMATS = {
         level: logging.Formatter(
-            f'\x1b[30;1m%(asctime)s\x1b[0m {colour}%(levelname)-8s\x1b[0m \x1b[35m%(name)s\x1b[0m %(message)s',
-            '%Y-%m-%d %H:%M:%S',
+            f"\x1b[30;1m%(asctime)s\x1b[0m {colour}%(levelname)-8s\x1b[0m \x1b[35m%(name)s\x1b[0m %(message)s",
+            "%Y-%m-%d %H:%M:%S",
         )
         for level, colour in LEVEL_COLOURS
     }
@@ -35,7 +35,7 @@ class ColorFormatter(logging.Formatter):
         # Override the traceback to always print in red
         if record.exc_info:
             text = formatter.formatException(record.exc_info)
-            record.exc_text = f'\x1b[31m{text}\x1b[0m'
+            record.exc_text = f"\x1b[31m{text}\x1b[0m"
 
         output = formatter.format(record)
 
@@ -43,11 +43,10 @@ class ColorFormatter(logging.Formatter):
         record.exc_text = None
         return output
 
+
 handler = logging.StreamHandler()
 handler.setFormatter(ColorFormatter())
-logging.basicConfig(
-    handlers=[handler], level=logging.INFO
-)
+logging.basicConfig(handlers=[handler], level=logging.INFO)
 from telegram import Update, InputSticker
 from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler
 from telegram.constants import StickerFormat
@@ -105,7 +104,9 @@ async def createEmoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
         for emoticon in emoticonMeta["thumbnailUrls"]:
             async with session.get(emoticon) as img:
                 img_bytes = BytesIO()
-                Image.open(BytesIO(await img.read())).resize((512, 512)).save(img_bytes, "png")
+                Image.open(BytesIO(await img.read())).resize((512, 512)).save(
+                    img_bytes, "png"
+                )
                 stickers.append(InputSticker(img_bytes.getvalue(), ["😀"]))
     curTime = str(datetime.datetime.now(datetime.UTC).timestamp()).replace(".", "")
     stickerName = f"t{curTime}_by_{context.bot.name[1:]}"
@@ -115,6 +116,12 @@ async def createEmoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text=f"총 {len(emoticonMeta['thumbnailUrls'])}개의 이모티콘을 텔레그램 서버로 업로드합니다.",
     )
     assert update.effective_user
+
+    doing_message = await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=f"업로드 중... (0/{len(emoticonMeta['thumbnailUrls'])})",
+    )
+
     await context.bot.create_new_sticker_set(
         user_id=update.effective_user.id,
         name=stickerName,
@@ -122,17 +129,20 @@ async def createEmoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
         sticker_format=StickerFormat.STATIC,
         stickers=[stickers[0]],
     )
-    
-    for sticker in stickers[1:]:
+
+    await doing_message.edit_text(
+        text=f"업로드 중... (1/{len(emoticonMeta['thumbnailUrls'])})"
+    )
+
+    for index, sticker in enumerate(stickers[1:], 2):
         await context.bot.add_sticker_to_set(
-            user_id=update.effective_user.id,
-            name=stickerName,
-            sticker=sticker
+            user_id=update.effective_user.id, name=stickerName, sticker=sticker
+        )
+        await doing_message.edit_text(
+            text=f"업로드 중... ({index}/{len(emoticonMeta['thumbnailUrls'])})"
         )
 
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id, text=f"{emoticonMeta['title']} 스티커 생성이 완료되었습니다!"
-    )
+    await doing_message.edit_text(text=f"{emoticonMeta['title']} 스티커 생성이 완료되었습니다!")
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
