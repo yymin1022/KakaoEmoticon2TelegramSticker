@@ -164,7 +164,18 @@ async def startBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == "__main__":
     application = (
-        ApplicationBuilder().token(os.getenv("TELEGRAM_TOKEN", "NO_TOKEN")).http_version("2").build()
+        ApplicationBuilder()
+        .token(os.getenv("TELEGRAM_TOKEN", "NO_TOKEN"))
+        .http_version("2")
+        .read_timeout(600)
+        .get_updates_read_timeout(600)
+        .write_timeout(600)
+        .get_updates_write_timeout(600)
+        .pool_timeout(600)
+        .get_updates_pool_timeout(600)
+        .connect_timeout(600)
+        .get_updates_connect_timeout(600)
+        .build()
     )
 
     application.add_handlers(
