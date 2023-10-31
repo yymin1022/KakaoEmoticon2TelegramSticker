@@ -1,5 +1,5 @@
-beautifulsoup4
 pillow
-python-telegram-bot
-requests
-selenium
+python-telegram-bot[http2]
+aiohttp==3.9.0b0
+aiodns
+Brotli
