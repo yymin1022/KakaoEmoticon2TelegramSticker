@@ -43,13 +43,15 @@ class ColorFormatter(logging.Formatter):
         record.exc_text = None
         return output
 
+LOG_LEVEL = logging.INFO
 
-handler = logging.StreamHandler()
-handler.setFormatter(ColorFormatter())
-logging.basicConfig(
-    handlers=[handler],
-    level=logging.INFO
-)
+def setup_logger():
+    handler = logging.StreamHandler()
+    handler.setFormatter(ColorFormatter())
+    logging.basicConfig(
+        handlers=[handler],
+        level=LOG_LEVEL,
+    )
 
 
 from telegram import Update, InputSticker
@@ -164,6 +166,8 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 if __name__ == "__main__":
+    setup_logger()
+
     application = (
         ApplicationBuilder()
         .token(os.getenv("TELEGRAM_TOKEN", "NO_TOKEN"))
