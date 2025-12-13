@@ -71,7 +71,7 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
                         format=StickerFormat.STATIC
                     )
                 )
-    cur_time = str(datetime.datetime.now(datetime.UTC).timestamp()).replace(".", "")
+    cur_time = str(datetime.datetime.now(datetime.timezone.utc).timestamp()).replace(".", "")
     sticker_name = f"t{cur_time}_by_{context.bot.name[1:]}"
 
     await context.bot.send_message(
