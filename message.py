@@ -1,7 +1,7 @@
 import datetime
 
 from io import BytesIO
-from typing import TypedDict, List, Sequence
+from typing import TypedDict, List
 
 from PIL import Image
 from aiohttp import ClientSession
@@ -56,7 +56,7 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text=f"{emoticon_meta['title']} 이모티콘을 다운로드 합니다.",
         )
 
-        stickers: Sequence[InputSticker] = []
+        stickers: List[InputSticker] = []
 
         for emoticon in emoticon_meta["thumbnailUrls"]:
             async with session.get(emoticon) as img:
