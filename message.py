@@ -111,5 +111,5 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="https://t.me/addstickers/%s" % sticker_name,
+        text=f"https://t.me/addstickers/{sticker_name}",
     )
