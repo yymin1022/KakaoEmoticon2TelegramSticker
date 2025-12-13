@@ -46,7 +46,12 @@ class ColorFormatter(logging.Formatter):
 
 handler = logging.StreamHandler()
 handler.setFormatter(ColorFormatter())
-logging.basicConfig(handlers=[handler], level=logging.INFO)
+logging.basicConfig(
+    handlers=[handler],
+    level=logging.INFO
+)
+
+
 from telegram import Update, InputSticker
 from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler
 from telegram.constants import StickerFormat
@@ -70,83 +75,91 @@ class EmoticonMeta(TypedDict):
 EMOTICON_ID_REGEX = compile("https://e.kakao.com/t/.+")
 
 
-async def createEmoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     assert update.effective_chat
     assert context.args
 
-    emoticonURL = context.args[0]
+    emoticon_url = context.args[0]
 
-    if not EMOTICON_ID_REGEX.match(emoticonURL):
+    if not EMOTICON_ID_REGEX.match(emoticon_url):
         await context.bot.send_message(
-            chat_id=update.effective_chat.id, text="유효한 이모티콘 URL이 아닙니다."
+            chat_id=update.effective_chat.id,
+            tex="유효한 이모티콘 URL이 아닙니다.",
         )
+
         return
 
     await context.bot.send_message(
-        chat_id=update.effective_chat.id, text="이모티콘 정보를 불러오는 중입니다."
+        chat_id=update.effective_chat.id,
+        text="이모티콘 정보를 불러오는 중입니다.",
     )
 
-    emoticonURL = emoticonURL.replace(
-        "https://e.kakao.com/t/", "https://e.kakao.com/api/v1/items/t/"
+    emoticon_url = emoticon_url.replace(
+        "https://e.kakao.com/t/",
+        "https://e.kakao.com/api/v1/items/t/",
     )
 
     async with ClientSession() as session:
-        async with session.get(emoticonURL) as resp:
-            emoticonMeta = EmoticonMeta((await resp.json())["result"])
+        async with session.get(emoticon_url) as resp:
+            emoticon_meta = EmoticonMeta((await resp.json())["result"])
 
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=f"{emoticonMeta['title']} 이모티콘을 다운로드 합니다.",
+            text=f"{emoticon_meta['title']} 이모티콘을 다운로드 합니다.",
         )
 
         stickers: Sequence[InputSticker] = []
 
-        for emoticon in emoticonMeta["thumbnailUrls"]:
+        for emoticon in emoticon_meta["thumbnailUrls"]:
             async with session.get(emoticon) as img:
                 img_bytes = BytesIO()
                 Image.open(BytesIO(await img.read())).resize((512, 512)).save(
                     img_bytes, "png"
                 )
                 stickers.append(InputSticker(img_bytes.getvalue(), ["😀"]))
-    curTime = str(datetime.datetime.now(datetime.UTC).timestamp()).replace(".", "")
-    stickerName = f"t{curTime}_by_{context.bot.name[1:]}"
+    cur_time = str(datetime.datetime.now(datetime.UTC).timestamp()).replace(".", "")
+    sticker_name = f"t{cur_time}_by_{context.bot.name[1:]}"
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=f"총 {len(emoticonMeta['thumbnailUrls'])}개의 이모티콘을 텔레그램 서버로 업로드합니다.",
+        text=f"총 {len(emoticon_meta['thumbnailUrls'])}개의 이모티콘을 텔레그램 서버로 업로드합니다.",
     )
     assert update.effective_user
 
     doing_message = await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=f"업로드 중... (0/{len(emoticonMeta['thumbnailUrls'])})",
+        text=f"업로드 중... (0/{len(emoticon_meta['thumbnailUrls'])})",
     )
 
     await context.bot.create_new_sticker_set(
         user_id=update.effective_user.id,
-        name=stickerName,
-        title=emoticonMeta["title"],
+        name=sticker_name,
+        title=emoticon_meta["title"],
         sticker_format=StickerFormat.STATIC,
         stickers=[stickers[0]],
     )
 
     await doing_message.edit_text(
-        text=f"업로드 중... (1/{len(emoticonMeta['thumbnailUrls'])})"
+        text=f"업로드 중... (1/{len(emoticon_meta['thumbnailUrls'])})",
     )
 
     for index, sticker in enumerate(stickers[1:], 2):
         await context.bot.add_sticker_to_set(
-            user_id=update.effective_user.id, name=stickerName, sticker=sticker
+            user_id=update.effective_user.id,
+            name=sticker_name,
+            sticker=sticker,
         )
         await doing_message.edit_text(
-            text=f"업로드 중... ({index}/{len(emoticonMeta['thumbnailUrls'])})"
+            text=f"업로드 중... ({index}/{len(emoticon_meta['thumbnailUrls'])})",
         )
 
-    await doing_message.edit_text(text=f"{emoticonMeta['title']} 스티커 생성이 완료되었습니다!")
+    await doing_message.edit_text(
+        text=f"{emoticon_meta['title']} 스티커 생성이 완료되었습니다!",
+    )
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="https://t.me/addstickers/%s" % (stickerName),
+        text="https://t.me/addstickers/%s" % sticker_name,
     )
 
 
@@ -168,7 +181,7 @@ if __name__ == "__main__":
 
     application.add_handlers(
         [
-            CommandHandler("create", createEmoticon),
+            CommandHandler("create", create_emoticon),
         ]
     )
 
