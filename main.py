@@ -15,6 +15,11 @@ def main():
     telegram_application = (
         ApplicationBuilder()
         .token(TELEGRAM_TOKEN)
+        .read_timeout(600)
+        .write_timeout(600)
+        .pool_timeout(600)
+        .connect_timeout(600)
+        .http_version("2")
         .build()
     )
 
