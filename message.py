@@ -64,7 +64,13 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 Image.open(BytesIO(await img.read())).resize((512, 512)).save(
                     img_bytes, "png"
                 )
-                stickers.append(InputSticker(img_bytes.getvalue(), ["😀"]))
+                stickers.append(
+                    InputSticker(
+                        sticker=img_bytes.getvalue(),
+                        emoji_list=["😀"],
+                        format=StickerFormat.STATIC
+                    )
+                )
     cur_time = str(datetime.datetime.now(datetime.UTC).timestamp()).replace(".", "")
     sticker_name = f"t{cur_time}_by_{context.bot.name[1:]}"
 
@@ -82,7 +88,6 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id=update.effective_user.id,
         name=sticker_name,
         title=emoticon_meta["title"],
-        sticker_format=StickerFormat.STATIC,
         stickers=[stickers[0]],
     )
 
