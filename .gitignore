@@ -1,1 +1,4 @@
-/emoticonTemp/@eaDir
+__pycache__/
+.idea/
+venv/
+emoticonTemp/@eaDir
