@@ -150,18 +150,6 @@ async def createEmoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def helpMenu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    assert update.effective_chat
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="Help Menu")
-
-
-async def startBot(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    assert update.effective_chat
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id, text="Bot Started!"
-    )
-
-
 if __name__ == "__main__":
     application = (
         ApplicationBuilder()
@@ -180,8 +168,6 @@ if __name__ == "__main__":
 
     application.add_handlers(
         [
-            CommandHandler("start", startBot),
-            CommandHandler("help", helpMenu),
             CommandHandler("create", createEmoticon),
         ]
     )
