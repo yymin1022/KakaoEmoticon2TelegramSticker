@@ -35,23 +35,8 @@ pipeline {
     }
 
     post {
-        success {
-            withCredentials([string(credentialsId: "discord-default", variable: "DISCORD_WEBHOOK_URL")]) {
-                discordSend description: "**Build ${BUILD_NUMBER}**가 성공하였습니다.\n\n${GIT_INFO}",
-                            link: env.BUILD_URL,
-                            result: currentBuild.currentResult,
-                            title: env.JOB_NAME,
-                            webhookURL: "$DISCORD_WEBHOOK_URL"
-            }
-        }
-        failure {
-            withCredentials([string(credentialsId: "discord-default", variable: "DISCORD_WEBHOOK_URL")]) {
-                discordSend description: "**Build ${BUILD_NUMBER}**가 실패하였습니다.\n\n${GIT_INFO}",
-                            link: env.BUILD_URL,
-                            result: currentBuild.currentResult,
-                            title: env.JOB_NAME,
-                            webhookURL: "$DISCORD_WEBHOOK_URL"
-            }
+        always {
+            UsefulNotifier(currentBuild.currentResult)
         }
     }
 }
