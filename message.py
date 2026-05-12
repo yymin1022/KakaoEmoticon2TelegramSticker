@@ -44,12 +44,16 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     emoticon_url = emoticon_url.replace(
         "https://e.kakao.com/t/",
-        "https://e.kakao.com/api/v1/items/t/",
+        "https://e.kakao.com/api/items/",
     )
 
     async with ClientSession() as session:
         async with session.get(emoticon_url) as resp:
-            emoticon_meta = EmoticonMeta((await resp.json())["result"])
+            data = await resp.json()
+            emoticon_meta = EmoticonMeta(
+                title=data["hero"]["title"],
+                thumbnailUrls=[item["thumbnailUrl"] for item in data["contents"]["items"]],
+            )
 
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
