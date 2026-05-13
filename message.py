@@ -1,6 +1,7 @@
 import datetime
 
 from io import BytesIO
+from json import JSONDecodeError
 from typing import TypedDict, List
 
 from PIL import Image
@@ -52,7 +53,7 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
             async with session.get(emoticon_url) as resp:
                 resp.raise_for_status()
                 data = await resp.json()
-        except ClientError:
+        except (ClientError, JSONDecodeError):
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
                 text="이모티콘 정보를 가져올 수 없습니다.",
