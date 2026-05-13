@@ -1,10 +1,11 @@
 import datetime
 
 from io import BytesIO
+from json import JSONDecodeError
 from typing import TypedDict, List
 
 from PIL import Image
-from aiohttp import ClientSession
+from aiohttp import ClientError, ClientSession
 from telegram import Update, InputSticker
 from telegram.constants import StickerFormat
 from telegram.ext import ContextTypes
@@ -44,12 +45,33 @@ async def create_emoticon(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     emoticon_url = emoticon_url.replace(
         "https://e.kakao.com/t/",
-        "https://e.kakao.com/api/v1/items/t/",
+        "https://e.kakao.com/api/items/",
     )
 
     async with ClientSession() as session:
-        async with session.get(emoticon_url) as resp:
-            emoticon_meta = EmoticonMeta((await resp.json())["result"])
+        try:
+            async with session.get(emoticon_url) as resp:
+                resp.raise_for_status()
+                data = await resp.json()
+        except (ClientError, JSONDecodeError):
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="이모티콘 정보를 가져올 수 없습니다.",
+            )
+            return
+
+        items = data["contents"]["items"]
+        if not items:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="이모티콘 목록이 비어 있습니다.",
+            )
+            return
+
+        emoticon_meta = EmoticonMeta(
+            title=data["hero"]["title"],
+            thumbnailUrls=[item["thumbnailUrl"] for item in items],
+        )
 
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
