@@ -1,31 +1,40 @@
-﻿# Kakao Emoticon to Telegram Sticker Converter
+# Kakao Emoticon to Telegram Sticker Converter
 
-<img src="Images/app_1.jpg" width="30%" height="30%" alt="Screenshot"></img>
-<img src="Images/app_2.jpg" width="30%" height="30%" alt="Screenshot"></img>
-<img src="Images/app_3.jpg" width="30%" height="30%" alt="Screenshot"></img>
+This is a simple Telegram bot, which converts Kakao Emoticon and generate Telegram Sticker set.
 
-카카오톡의 이모티콘 세트를 텔레그램에서 사용 가능한 스티커 세트로 변환합니다.
+## Get Started
 
-이를 이용해 상업적 혹은 올바르지 않은 용도로 활용하는 경우에는 저작권 문제가 발생할 수 있습니다.
+1. Clone this repository on your local environment
+   ```bash
+   yong@ubuntu-server ~/ :$ git clone https://github.com/yymin1022/KakaoEmoticon2TelegramSticker.git
+   ```
+2. Set your Telegram bot token as ENV variable
+   ```bash
+   yong@ubuntu-server ~/ :$ export TELEGRAM_TOKEN "YOUR_TELEGRAM_BOT_TOKEN"
+   ```
+3. Install pip requirements and run with python
+   ```bash
+   yong@ubuntu-server ~/ :$ cd KakaoEmoticon2TelegramSticker
+   yong@ubuntu-server ~/KakaoEmoticon2TelegramSticker/ :$ python3 -m pip install -r requirements.txt
+   yong@ubuntu-server ~/KakaoEmoticon2TelegramSticker/ :$ python3 main.py
+   ```
 
-***
+## Team Members
 
-### How To
+| [유용민](https://github.com/yymin1022) |
+|---|
+| <img src="https://avatars.githubusercontent.com/u/12806229?v=4" width="150" /> |
+| Android |
+| Developer |
 
-```sh
-/create 카카오이모티콘URL
-```
+## Screenshots
 
-***
+<p align="left">
+  <img src="Images/app_1.jpg" width=30%>
+  <img src="Images/app_2.jpg" width=30%>
+  <img src="Images/app_3.jpg" width=30%>
+</p>
 
-### Links
+## Useful links
 
-[Github](https://github.com/yymin1022/KakaoEmoticon2TelegramSticker)<br/>
-[Telegram 봇 추가](https://t.me/KakaoEmoticon2Telegram_bot)
-
-***
-
-### History
-
-* 2021\. 04\. 개발 시작
-* 2021\. 05\. V1\.0 배포
+- [Telegram Bot](https://t.me/KakaoEmoticon2Telegram_bot)
